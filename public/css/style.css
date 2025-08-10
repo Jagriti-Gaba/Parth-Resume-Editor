@@ -1,0 +1,254 @@
+:root {
+  --primary-color: #6c63ff;
+  --secondary-color: #4d44db;
+  --accent-color: #ff6584;
+  --light-bg: #f8f9fa;
+  --dark-color: #1a1a2e;
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+}
+
+
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--light-bg);
+  overflow-x: hidden;
+  color: #495057;
+}
+
+.topbar {
+  background: var(--gradient-primary);
+  height: 70px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.sidebar {
+  width: 80px;
+  background: white;
+  position: fixed;
+  top: 70px;
+  bottom: 0;
+  box-shadow: 2px 0 15px rgba(0,0,0,0.05);
+  padding-top: 20px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-item {
+  text-align: center;
+  padding: 12px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+  margin-bottom: 5px;
+}
+
+.sidebar-item:hover, 
+.sidebar-item.active {
+  background: rgba(108, 99, 255, 0.1) !important;
+  border-left: 3px solid var(--primary-color) !important;
+}
+
+.sidebar-item i {
+  font-size: 1.3rem;
+  color: #6c757d;
+}
+
+.main-content {
+  margin-left: 80px;
+  margin-right: 350px;
+  padding: 30px;
+  min-height: calc(100vh - 70px);
+}
+
+.resume-card {
+  width: 800px;
+  min-height: 1120px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  margin: 0 auto;
+  padding: 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+.resume-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: var(--gradient-primary);
+}
+
+.settings-panel {
+  width: 350px;
+  background: white;
+  position: fixed;
+  right: 0;
+  top: 70px;
+  bottom: 0;
+  box-shadow: -2px 0 15px rgba(0,0,0,0.05);
+  padding: 25px;
+  overflow-y: auto;
+}
+
+.settings-group {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  border: 1px solid #e9ecef;
+}
+
+.settings-group-title {
+  font-weight: 800;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary-color);
+}
+
+.content-editor {
+  display: none;
+}
+
+.content-editor.active {
+  display: block;
+}
+
+[contenteditable="true"] {
+  padding: 5px 8px;
+  border-radius: 4px;
+  border: 1px dashed transparent;
+  min-height: 20px;
+}
+
+[contenteditable="true"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background-color: rgba(108, 99, 255, 0.05);
+}
+
+
+/* Ensure editable elements are interactive */
+[contenteditable="true"] {
+  cursor: text;
+  user-select: text;
+  pointer-events: auto !important;
+  min-height: 1em; /* Give empty fields some height */
+}
+
+/* Visual indicator for edit mode */
+.editing-mode {
+  outline: 1px dashed #4d44db;
+  padding: 2px;
+}
+
+.section {
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e9ecef;
+  position: relative;
+}
+
+.section-title {
+  font-weight: 600;
+  color: var(--header-color, var(--primary-color));
+  margin-bottom: 15px;
+}
+
+.template-card {
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.template-card.active {
+  border-color: var(--primary-color);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.template-preview {
+  height: 100px;
+  width: 100%;
+}
+
+.template-name {
+  padding: 8px;
+  text-align: center;
+  background: white;
+  font-weight: 500;
+}
+
+.delete-section-btn {
+  position: absolute;
+  top: 5px;
+  right: 0;
+  background: #ce3150 !important;
+  color: white;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.section:hover .delete-section-btn {
+  opacity: 1;
+}
+
+.section-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.section-controls .btn {
+  flex: 1;
+}
+
+.section-type-btns {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.section-type-btns .btn {
+  flex: 1;
+}
+
+.custom-section-modal .modal-body {
+  padding: 20px;
+}
+
+.custom-section-modal .form-group {
+  margin-bottom: 15px;
+}
+
+@media (max-width: 1200px) {
+  .main-content {
+    margin-right: 0;
+  }
+
+  .settings-panel {
+    transform: translateX(100%);
+  }
+
+  .settings-panel.active {
+    transform: translateX(0);
+  }
+}

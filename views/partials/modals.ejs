@@ -1,0 +1,82 @@
+<!-- Objective Modal -->
+ 
+<div class="modal fade" id="objectiveModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Objective</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group mb-3">
+          <label for="objectiveTitle" class="form-label">Objective Title</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="objectiveTitle" 
+            value="Career Objective" 
+            aria-describedby="objectiveTitleHelp"
+            autocomplete="off"
+          >
+          <div id="objectiveTitleHelp" class="form-text">Enter a concise title for the objective section.</div>
+        </div>
+        <div class="form-group mb-3">
+          <label for="objectiveContent" class="form-label">Objective Content</label>
+          <textarea 
+            class="form-control" 
+            id="objectiveContent" 
+            rows="4" 
+            placeholder="Describe your career objective here..."
+            aria-describedby="objectiveContentHelp"
+          >Seeking a challenging position in a reputable organization to expand my learnings, knowledge, and skills.</textarea>
+          <div id="objectiveContentHelp" class="form-text">Provide detailed career objectives or summary.</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveObjectiveBtn">Add Objective</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Section Modal -->
+<div class="modal fade custom-section-modal" id="customSectionModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Custom Section</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group mb-3">
+          <label for="customSectionTitle" class="form-label">Section Title</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="customSectionTitle" 
+            placeholder="e.g., Projects, Certifications" 
+            autocomplete="off"
+            aria-describedby="customSectionTitleHelp"
+          >
+          <div id="customSectionTitleHelp" class="form-text">Enter the title for your custom section.</div>
+        </div>
+        <div class="form-group mb-3">
+          <label for="customSectionContent" class="form-label">Section Content</label>
+          <textarea 
+            class="form-control" 
+            id="customSectionContent" 
+            rows="6" 
+            placeholder="Enter your content here..." 
+            aria-describedby="customSectionContentHelp"
+          ></textarea>
+          <div id="customSectionContentHelp" class="form-text">You can edit this content later directly inside the resume.</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveCustomSectionBtn">Add Section</button>
+      </div>
+    </div>
+  </div>
+</div>

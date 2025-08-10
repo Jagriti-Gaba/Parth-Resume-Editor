@@ -1,0 +1,65 @@
+<!-- resume_professional.ejs -->
+<header>
+  <h1 contenteditable="true"><%= resumeData.name %></h1>
+  <p contenteditable="true"><%= resumeData.phone %> | <%= resumeData.email %></p>
+</header>
+
+<section>
+  <h2 class="section-title" contenteditable="true">Education</h2>
+  <% resumeData.education.forEach(function(edu) { %>
+    <div class="section" contenteditable="true" style="margin-bottom: 15px;">
+      <strong><%= edu.degree %></strong> — <%= edu.school %> (<%= edu.date %>)<br />
+      Major: <%= edu.major %>
+    </div>
+  <% }); %>
+</section>
+
+<section>
+  <h2 class="section-title" contenteditable="true">Experience</h2>
+  <% resumeData.experience.forEach(function(exp) { %>
+    <div class="section" style="margin-bottom: 20px;">
+      <h3 contenteditable="true"><%= exp.position %></h3>
+      <p contenteditable="true"><%= exp.company %> (<%= exp.date %>)</p>
+      <ul>
+        <% exp.responsibilities.forEach(function(item) { %>
+          <li contenteditable="true"><%= item %></li>
+        <% }); %>
+      </ul>
+    </div>
+  <% }); %>
+</section>
+
+<section>
+  <h2 class="section-title" contenteditable="true">Skills</h2>
+  <% for (const category in resumeData.skills) { %>
+    <div class="section" style="margin-bottom: 10px;">
+      <strong><%= category %>:</strong>
+      <span contenteditable="true"><%= resumeData.skills[category].join(', ') %></span>
+    </div>
+  <% } %>
+</section>
+
+<section>
+  <h2 class="section-title" contenteditable="true">Projects</h2>
+  <% resumeData.projects.forEach(function(proj) { %>
+    <div class="section" style="margin-bottom: 20px;">
+      <h3 contenteditable="true"><%= proj.name %></h3>
+      <p contenteditable="true"><%= proj.date %></p>
+      <p contenteditable="true">Technologies: <%= proj.technologies %></p>
+      <ul>
+        <% proj.details.forEach(function(detail) { %>
+          <li contenteditable="true"><%= detail %></li>
+        <% }); %>
+      </ul>
+    </div>
+  <% }); %>
+</section>
+
+<section>
+  <h2 class="section-title" contenteditable="true">Achievements</h2>
+  <ul>
+    <% resumeData.achievements.forEach(function(ach) { %>
+      <li contenteditable="true"><%= ach %></li>
+    <% }); %>
+  </ul>
+</section>
