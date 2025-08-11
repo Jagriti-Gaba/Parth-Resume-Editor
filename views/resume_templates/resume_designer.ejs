@@ -1,0 +1,90 @@
+
+  
+
+<body>
+  <div class="header">
+     <% if (resumeData.profileImage) { %>
+    <div class="profile-image-container">
+      <img src="<%= resumeData.profileImage %>" alt="Profile Photo" class="profile-image">
+    </div>
+  <% } %>
+  <div class="name" contenteditable="true"><%= resumeData.name %></div>
+    <div class="name"><%= resumeData.name %></div>
+    <div class="title">Marketing Manager</div>
+    
+    <ul class="contact-list" >
+      <li><%= resumeData.phone %></li>
+      <li><%= resumeData.email %></li>
+      <li><%= resumeData.address || 'Your Address' %></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>About Me</h2>
+    <p><%= resumeData.summary || 'Professional summary goes here...' %></p>
+  </div>
+
+  <div class="section">
+    <h2>Skills</h2>
+    <ul>
+      <% for (const category in resumeData.skills) { %>
+        <% resumeData.skills[category].forEach(skill => { %>
+          <li><%= skill %></li>
+        <% }) %>
+      <% } %>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <h2>Education</h2>
+    <% resumeData.education.forEach(edu => { %>
+      <div class="education-item">
+        <h3><%= edu.degree %></h3>
+        <div class="school"><%= edu.school %></div>
+        <div class="date"><%= edu.date %></div>
+        <% if (edu.description) { %>
+          <p><%= edu.description %></p>
+        <% } %>
+      </div>
+    <% }) %>
+  </div>
+
+  <div class="section">
+    <h2>Experience</h2>
+    <% resumeData.experience.forEach(exp => { %>
+      <div class="experience-item">
+        <h3><%= exp.position %></h3>
+        <div class="company"><%= exp.company %></div>
+        <div class="date"><%= exp.date %></div>
+        <ul>
+          <% exp.responsibilities.forEach(item => { %>
+            <li><%= item %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% }) %>
+  </div>
+
+  <div class="section">
+    <h2>References</h2>
+    <table class="references-table">
+      <tr>
+        <td>
+          <strong><%= resumeData.references?.[0]?.name || 'Reference Name' %></strong><br>
+          <%= resumeData.references?.[0]?.position || 'Position' %> / <%= resumeData.references?.[0]?.company || 'Company' %><br>
+          <%= resumeData.references?.[0]?.phone || 'Phone' %><br>
+          <%= resumeData.references?.[0]?.email || 'Email' %>
+        </td>
+        <td>
+          <strong><%= resumeData.references?.[1]?.name || 'Reference Name' %></strong><br>
+          <%= resumeData.references?.[1]?.position || 'Position' %> / <%= resumeData.references?.[1]?.company || 'Company' %><br>
+          <%= resumeData.references?.[1]?.phone || 'Phone' %><br>
+          <%= resumeData.references?.[1]?.email || 'Email' %>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!-- views/resume_templates/resume_minimalist -->
+<div class="resume-template professional" style="font-family:'Inter',sans-serif; max-width:900px; margin:0 auto; background:#f2ebe6; border-radius:18px; box-shadow:0 0 8px #0001; display:flex;">
+
+  <!-- Sidebar / Left Column -->
+  <div style="width:300px; background:#f7f6fa; border-radius:18px 0 0 18px; padding:36px 26px; color:#444;">
+
+    <% if (resumeData.profileImage) { %>
+      <div style="display:flex; justify-content:center; margin-bottom:30px;">
+        <img src="<%= resumeData.profileImage %>" alt="Profile Photo" style="width:140px; height:140px; object-fit:cover; border-radius:14px;">
+      </div>
+    <% } %>
+
+    <div style="margin-bottom:28px;">
+      <h2 contenteditable="true" style="font-size:2.2rem; font-weight:700; margin:0 0 6px 0; color:#2d2d34;">
+        <%= resumeData.name || 'Your Name' %>
+      </h2>
+      <div contenteditable="true" style="font-size:1.15rem; color:#838388;">
+        <%= resumeData.title || 'Your Profession' %>
+      </div>
+    </div>
+
+    <% if (resumeData.email || resumeData.phone || resumeData.address) { %>
+      <div style="margin-bottom:24px; font-size:0.99rem;">
+        <% if (resumeData.phone) { %>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-phone" style="font-size:1.0em; color:#6366f1;"></i>
+            <span contenteditable="true"><%= resumeData.phone %></span>
+          </div>
+        <% } %>
+        <% if (resumeData.email) { %>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-envelope-open" style="font-size:1.0em; color:#6366f1;"></i>
+            <span contenteditable="true"><%= resumeData.email %></span>
+          </div>
+        <% } %>
+        <% if (resumeData.address) { %>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-map-marker-alt" style="font-size:1.0em; color:#6366f1;"></i>
+            <span contenteditable="true"><%= resumeData.address %></span>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+
+    <% if (resumeData.education && resumeData.education.length > 0) { %>
+      <div style="margin-bottom:32px;">
+        <div style="font-weight:700; color:#6366f1; letter-spacing:1px; margin-bottom:8px;">
+          <i class="fas fa-user-graduate" style="margin-right: 6px;"></i>Education
+        </div>
+        <% resumeData.education.forEach(edu => { %>
+          <div style="margin-bottom:14px;">
+            <div contenteditable="true" style="font-weight:600;"><%= edu.degree || 'Enter degree' %></div>
+            <div contenteditable="true" style="color:#4f4f56;"><%= edu.school || 'Enter school' %></div>
+            <div contenteditable="true" style="font-size:0.93em; color:#999;"><%= edu.date || 'Date' %></div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <% if (resumeData.skills && Object.keys(resumeData.skills).length > 0) { %>
+      <div style="margin-bottom:32px;">
+        <div style="font-weight:700; color:#6366f1; letter-spacing:1px; margin-bottom:6px;">
+          <i class="fas fa-lightbulb" style="margin-right:6px;"></i>Expertise
+        </div>
+        <% Object.entries(resumeData.skills).forEach(([category, skills]) => { %>
+          <% if (skills && skills.length > 0) { %>
+            <div style="margin-bottom:8px;">
+              <span contenteditable="true" style="font-weight:600; color:#1e2329;"><%= category %>:</span>
+              <span contenteditable="true" style="color:#555;"><%= skills.join(', ') %></span>
+            </div>
+          <% } %>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <% if (resumeData.languages && resumeData.languages.length > 0) { %>
+      <div style="margin-bottom:32px;">
+        <div style="font-weight:700; color:#6366f1; letter-spacing:1px; margin-bottom:6px;">
+          <i class="fas fa-language" style="margin-right:6px;"></i>Language
+        </div>
+        <div contenteditable="true" style="color:#555;"><%= resumeData.languages.join(', ') %></div>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Main / Right Column -->
+  <div style="flex:1; padding:36px 28px;">
+
+    <% if (resumeData.profile) { %>
+      <div style="margin-bottom:28px;">
+        <div style="font-weight:700; color:#6366f1; margin-bottom:6px;">
+          <i class="fas fa-user" style="margin-right:6px;"></i>Profile
+        </div>
+        <div contenteditable="true" style="color:#444; font-size:1rem; line-height:1.6;">
+          <%= resumeData.profile %>
+        </div>
+      </div>
+    <% } %>
+
+    <% if (resumeData.experience && resumeData.experience.length > 0) { %>
+      <div style="margin-bottom:38px;">
+        <div style="font-weight:700; color:#6366f1; margin-bottom:8px;">
+          <i class="fas fa-briefcase" style="margin-right:6px;"></i>Work Experience
+        </div>
+        <% resumeData.experience.forEach(exp => { %>
+          <div style="margin-bottom:28px;">
+            <div contenteditable="true" style="font-size:1em; font-weight:600; color:#2d2d34;">
+              <span><%= exp.company || 'Company' %></span>
+              <span style="color:#4d44db;"> — <%= exp.position || 'Position' %></span>
+              <span style="color:#6366f1; float:right; font-weight:400;"><%= exp.date || 'Date' %></span>
+            </div>
+            <% if (exp.responsibilities && exp.responsibilities.length > 0) { %>
+              <ul style="margin:10px 0 0 20px; padding:0; color:#444; font-size:0.96em;">
+                <% exp.responsibilities.forEach(r => { %>
+                  <li contenteditable="true"><%= r || 'Add responsibility' %></li>
+                <% }); %>
+              </ul>
+            <% } else { %>
+              <ul><li contenteditable="true">Add responsibility...</li></ul>
+            <% } %>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <% if (resumeData.projects && resumeData.projects.length > 0) { %>
+      <div style="margin-bottom:32px;">
+        <div style="font-weight:700; color:#6366f1; margin-bottom:8px;">
+          <i class="fas fa-project-diagram" style="margin-right:6px;"></i>Projects
+        </div>
+        <% resumeData.projects.forEach(proj => { %>
+          <div style="margin-bottom:20px;">
+            <div contenteditable="true" style="font-size:1em; font-weight:600;"><%= proj.name || 'Project Name' %></div>
+            <% if (proj.technologies) { %>
+              <div contenteditable="true" style="color:#4f4f56; font-size:0.97em;">Technologies: <%= proj.technologies %></div>
+            <% } %>
+            <% if (proj.date) { %>
+              <div contenteditable="true" style="color:#999; font-size:0.93em;"><%= proj.date %></div>
+            <% } %>
+            <% if (proj.details && proj.details.length > 0) { %>
+              <ul style="margin:8px 0 0 18px; color:#444;">
+                <% proj.details.forEach(detail => { %>
+                  <li contenteditable="true"><%= detail || 'Add project detail...' %></li>
+                <% }); %>
+              </ul>
+            <% } else { %>
+              <ul><li contenteditable="true">Add project detail...</li></ul>
+            <% } %>
+            <% if (proj.link) { %>
+              <div><a href="<%= proj.link %>" style="color:#6366f1; text-decoration:underline; font-size:0.97em;">View Project</a></div>
+            <% } %>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <% if (resumeData.achievements && resumeData.achievements.length > 0) { %>
+      <div style="margin-bottom:32px;">
+        <div style="font-weight:700; color:#6366f1; letter-spacing:1px; margin-bottom:8px;">
+          <i class="fas fa-trophy" style="margin-right:6px;"></i>Achievements
+        </div>
+        <ul style="color:#444;">
+          <% resumeData.achievements.forEach(ach => { %>
+            <li contenteditable="true"><%= ach || 'Add achievement...' %></li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+
+    <% if (resumeData.references && resumeData.references.length > 0) { %>
+      <div style="margin-bottom:28px;">
+        <div style="font-weight:700; color:#6366f1; letter-spacing:1px; margin-bottom:8px;">
+          <i class="fas fa-handshake" style="margin-right:6px;"></i>References
+        </div>
+        <% resumeData.references.forEach(ref => { %>
+          <div contenteditable="true" style="font-size:1em; color:#222; font-weight:600;"><%= ref.name || 'Reference Name' %></div>
+          <div contenteditable="true" style="color:#666; font-size:0.97em;"><%= ref.position || 'Position' %> — <%= ref.company || 'Company' %></div>
+          <div contenteditable="true" style="color:#4d44db; font-size:0.97em;"><%= ref.email || 'email@example.com' %></div>
+        <% }); %>
+      </div>
+    <% } %>
+
+  </div>
+</div>

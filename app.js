@@ -6,6 +6,7 @@ const resumeData = {
   name: "Dilip Kumar",
   phone: "+91 895009584",
   email: "dilipkumar.docx@fes.higmail.com",
+  profileImage: "/Jagriti Profile.jpg",
   education: [
     {
       degree: "Govt. College Chhachhrauli - Kurukshetta University",
@@ -56,7 +57,20 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 console.log(path.join(__dirname, 'views', 'partials', 'header.ejs'))
 
-const allowedTemplates = ["modern", "basic", "professional","classic","template"];
+const allowedTemplates = ["modern", "basic", "professional","classic","designer","standard","creative","minimalist"];
+
+const multer = require('multer');
+const upload = multer({ dest: 'public/images/uploads/' });
+
+app.post('/upload-profile-image', upload.single('profileImage'), (req, res) => {
+  if (req.file) {
+    const imagePath = `/images/uploads/${req.file.filename}`;
+    // Save this path to your database or session
+    res.json({ success: true, imagePath });
+  } else {
+    res.status(400).json({ success: false });
+  }
+});
 
 app.get('/resume/:templateId', (req, res) => {
   const templateId = req.params.templateId;

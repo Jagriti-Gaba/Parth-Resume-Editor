@@ -1,215 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('./partials/header.ejs') %>
-<body>
-  <%- include('./partials/modals.ejs') %>
-  
-  <nav class="topbar navbar navbar-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-bold" href="#">
-        <img src="/logoBlack.png" alt="Logo " style="width: 10%;height: 10%;"/>
-        <span class="fs-3">PARTH</span>
-      </a>
+
+  <body>
+    <%- include('./partials/modals.ejs') %>
+
+      <nav class="topbar navbar navbar-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand fw-bold" href="#">
+            <img src="/logoBlack.png" alt="Logo " style="width: 12%;height: 12%;" />
+            <span class="fs-3">PARTH</span>
+          </a>
+          <div class="d-flex">
+            <button class="btn btn-outline-light btn-sm me-2 fs-5 rounded-pill" id="toggleEditBtn">
+              <i class="fas fa-edit me-1 fs-5 "></i> Edit Content
+            </button>
+            <div class="dropdown">
+              <button class="btn btn-sm  btn-outline-light dropdown-toggle fs-5 rounded-pill" type="button"
+                id="downloadDropdown" data-bs-toggle="dropdown">
+                <i class="fas fa-download me-1 fs-4"></i> Download
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#" id="downloadPdfBtn"><i class="fas fa-file-pdf me-2"></i>PDF</a>
+                </li>
+                <li><a class="dropdown-item" href="#" id="downloadPngBtn"><i class="fas fa-file-image me-2"></i>PNG</a>
+                </li>
+              </ul>
+            </div>
+            <button class="btn btn-outline-light btn-sm ms-2 d-lg-none" id="toggleSettingsBtn">
+              <i class="fas fa-cog"></i>
+            </button>
+          </div>
+        </div>
+      </nav>
+
       <div class="d-flex">
-        <button class="btn btn-outline-light btn-sm me-2" id="toggleEditBtn">
-          <i class="fas fa-edit me-1"></i> Edit Content
-        </button>
-        <div class="dropdown">
-          <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="downloadDropdown" data-bs-toggle="dropdown">
-            <i class="fas fa-download me-1"></i> Download
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#" id="downloadPdfBtn"><i class="fas fa-file-pdf me-2"></i>PDF</a></li>
-            <li><a class="dropdown-item" href="#" id="downloadPngBtn"><i class="fas fa-file-image me-2"></i>PNG</a></li>
-          </ul>
-        </div>
-        <button class="btn btn-outline-light btn-sm ms-2 d-lg-none" id="toggleSettingsBtn">
-          <i class="fas fa-cog"></i>
-        </button>
-      </div>
-    </div>
-  </nav>
+        <%- include('./partials/sidebar.ejs') %>
 
-  <div class="d-flex">
-    <%- include('./partials/sidebar.ejs') %>
-    
-    <main class="main-content">
-      <div id="resumeCanvas" class="resume-card template-<%= templateId || 'professional' %>"
-           style="font-size:14px; font-family:'Inter', sans-serif; color:#1f2937; background-color:#ffffff;">
-        <div class="resume-inner" style="text-align:left; line-height:1.4;">
-          <div class="resume-content">
-            <%- include(selectedTemplate, { resumeData: resumeData }) %>
-          </div>
-        </div>
-      </div>
-    </main>
+          <main class="main-content">
+            <div id="resumeCanvas" class="resume-card template-<%= templateId || 'professional' %>"
+              style="font-size:14px; font-family:'Inter', sans-serif; color:#1f2937; background-color:#ffffff;">
+              <div class="resume-inner" style="text-align:left; line-height:1.4;">
+                <div class="resume-content">
+                  <div class="resume-template <%= templateId %>">
+                    <%- include(selectedTemplate, { resumeData: resumeData }) %>
+                  </div>
 
-    <aside class="settings-panel">
-      <!-- Design Settings Panel -->
-      <div id="designPanel" class="content-editor active">
-        <div class="settings-group">
-          <div class="settings-group-title">
-            <i class="fas fa-sliders-h"></i>
-            <span>Design Settings</span>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Font Size</label>
-            <select id="fontSize" class="form-select form-select-sm">
-              <% [10,11,12,13,14,15,16,17,18,20,22,24].forEach(size => { %>
-                <option value="<%= size %>" <%= size === 14 ? 'selected' : '' %>><%= size %>px</option>
-              <% }); %>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Font Family</label>
-            <select id="fontStyle" class="form-select form-select-sm">
-              <option value="'Inter', sans-serif" selected>Inter (Modern)</option>
-              <option value="'Roboto', sans-serif">Roboto (Clean)</option>
-              <option value="'Lato', sans-serif">Lato (Friendly)</option>
-              <option value="'Times New Roman', serif">Times New Roman (Classic)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="settings-group">
-          <div class="settings-group-title">
-            <i class="fas fa-palette"></i>
-            <span>Colors</span>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <div class="mb-3">
-                <label class="form-label">Text Color</label>
-                <input type="color" id="fontColor" value="#1f2937" class="form-control form-control-color w-100">
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="mb-3">
-                <label class="form-label">Background</label>
-                <input type="color" id="bgColor" value="#ffffff" class="form-control form-control-color w-100">
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="mb-3">
-                <label class="form-label">Heading Color</label>
-                <input type="color" id="headingColor" value="#4d44db" class="form-control form-control-color w-100">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-group">
-          <div class="settings-group-title">
-            <i class="fas fa-align-left"></i>
-            <span>Alignment</span>
-          </div>
-          <div class="btn-group w-100" role="group">
-            <button type="button" class="btn btn-sm btn-outline-secondary btn-format active" data-alignment="left">
-              <i class="fas fa-align-left"></i> Left
-            </button>
-            <button type="button" class="btn btn-sm btn-outline-secondary btn-format" data-alignment="center">
-              <i class="fas fa-align-center"></i> Center
-            </button>
-            <button type="button" class="btn btn-sm btn-outline-secondary btn-format" data-alignment="right">
-              <i class="fas fa-align-right"></i> Right
-            </button>
-          </div>
-        </div>
-
-        <div class="settings-group">
-          <div class="settings-group-title">
-            <i class="fas fa-ruler-combined"></i>
-            <span>Line Spacing</span>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Line Height</label>
-            <select id="lineHeight" class="form-select form-select-sm">
-              <% [1.2, 1.4, 1.6, 1.8].forEach(height => { %>
-                <option value="<%= height %>" <%= height === 1.4 ? 'selected' : '' %>>
-                  <%= height === 1.2 ? 'Compact' : 
-                     height === 1.4 ? 'Normal' :
-                     height === 1.6 ? 'Relaxed' : 'Loose' %> (<%= height %>)
-                </option>
-              <% }); %>
-            </select>
-          </div>  
-        </div>
-      </div>
-
-      <div id="contentPanel" class="content-editor">
-        <div class="settings-group">
-          <div class="settings-group-title">
-            <i class="fas fa-edit"></i>
-            <span>Edit Content</span>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Add New Section</label>
-            <div class="section-type-btns mb-2">
-              <button class="btn btn-outline-primary btn-sm" id="addObjectiveBtn">
-                <i class="fas fa-bullseye me-1"></i> Objective
-              </button>
-              <button class="btn btn-outline-primary btn-sm" id="addCustomSectionBtn">
-                <i class="fas fa-plus-circle me-1"></i> Custom
-              </button>
-            </div>
-            <div class="input-group">
-              <select id="newSectionType" class="form-select form-select-sm">
-                <option value="summary">Summary</option>
-                <option value="experience">Work Experience</option>
-                <option value="education">Education</option>
-                <option value="skills">Skills</option>
-              </select>
-              <button id="addSectionBtn" class="btn btn-sm btn-primary">
-                <i class="fas fa-plus"></i> Add
-              </button>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Manage Sections</label>
-            <div id="sectionList" class="list-group">
-              <div class="text-muted p-3">No sections added yet</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="templatesPanel" class="content-editor">
-        <div class="settings-group">
-          <div class="settings-group-title">
-            <i class="fas fa-file-alt"></i>
-            <span>Resume Templates</span>
-          </div>
-          <div class="row g-3">
-            <% const templates = [
-              { id: 'professional', name: 'Professional', gradient: 'linear-gradient(135deg, #6c63ff, #4d44db)' },
-              { id: 'modern', name: 'Modern', gradient: 'linear-gradient(135deg, #00c6ff, #0072ff)' },
-              { id: 'creative', name: 'Creative', gradient: 'linear-gradient(135deg, #ff758c, #ff7eb3)' },
-              { id: 'minimal', name: 'Minimal', gradient: 'linear-gradient(135deg, #f5f7fa, #c3cfe2)' }
-            ]; %>
-            
-            <% templates.forEach(template => { %>
-              <div class="col-6">
-                <div class="template-card <%= template.id === (templateId || 'professional') ? 'active' : '' %>" 
-                     data-template="<%= template.id %>">
-                  <div class="template-preview" style="background: <%= template.gradient %>;"></div>
-                  <div class="template-name"><%= template.name %></div>
                 </div>
               </div>
-            <% }); %>
-          </div>
-        </div>
-      </div>
-    </aside>
-  </div>
+            </div>
+          </main>
 
- <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
-  // Explicitly make jsPDF available globally
-  window.jsPDF = window.jspdf.jsPDF;
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="/js/main.js"></script>
-</body>
+          <aside class="settings-panel">
+            <!-- Design Settings Panel -->
+            <div id="designPanel" class="content-editor active">
+              <div class="settings-group">
+                <div class="settings-group-title">
+                  <i class="fas fa-sliders-h fs-4"></i>
+                  <span class="fs-4">Design Settings</span>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label ">Font Size</label>
+                  <select id="fontSize" class="form-select form-select-sm">
+                    <% [10,11,12,13,14,15,16,17,18,20,22,24].forEach(size=> { %>
+                      <option value="<%= size %>" <%=size===14 ? 'selected' : '' %>><%= size %>px</option>
+                      <% }); %>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Font Family</label>
+                  <select id="fontStyle" class="form-select form-select-sm fs-6">
+                    <option value="'Inter', sans-serif" selected>Inter (Modern)</option>
+                    <option value="'Roboto', sans-serif">Roboto (Clean)</option>
+                    <option value="'Lato', sans-serif">Lato (Friendly)</option>
+                    <option value="'Times New Roman', serif">Times New Roman (Classic)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="settings-group">
+                <div class="settings-group-title">
+                  <i class="fas fa-camera fs-4"></i>
+                  <span class="fs-4">Profile Image</span>
+                </div>
+                <div class="mb-3">
+                  <% if (resumeData.profileImage) { %>
+                    <img src="<%= resumeData.profileImage %>" id="profileImagePreview" class="img-thumbnail mb-2"
+                      style="max-height: 100px;">
+                    <% } %>
+                      <input type="file" id="profileImageUpload" accept="image/*" class="form-control form-control-sm">
+                      <button id="saveProfileImageBtn" class="btn btn-s mt-2 rounded-pill btn-outline-light"
+                        style="background: linear-gradient(45deg, #d592f9, #6366f1)">Save Image</button>
+                </div>
+              </div>
+
+              <div class="settings-group">
+                <div class="settings-group-title">
+                  <i class="fas fa-palette fs-3"></i>
+                  <span class="fs-3">Colors</span>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="mb-3">
+                      <label class="form-label">Text Color</label>
+                      <input type="color" id="fontColor" value="#1f2937" class="form-control form-control-color w-100">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-3">
+                      <label class="form-label">Background</label>
+                      <input type="color" id="bgColor" value="#ffffff" class="form-control form-control-color w-100">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-3">
+                      <label class="form-label">Heading Color</label>
+                      <input type="color" id="headingColor" value="#4d44db"
+                        class="form-control form-control-color w-100">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings-group">
+                <div class="settings-group-title">
+                  <i class="fas fa-align-left fs-3"></i>
+                  <span class="fs-3">Alignment</span>
+                </div>
+                <div class="btn-group w-100" role="group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary btn-format active"
+                    data-alignment="left">
+                    <i class="fas fa-align-left"></i> Left
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary btn-format" data-alignment="center">
+                    <i class="fas fa-align-center"></i> Center
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary btn-format" data-alignment="right">
+                    <i class="fas fa-align-right"></i> Right
+                  </button>
+                </div>
+              </div>
+
+              <div class="settings-group">
+                <div class="settings-group-title">
+                  <i class="fas fa-ruler-combined fs-3"></i>
+                  <span class="fs-3">Line Spacing</span>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Line Height</label>
+                  <select id="lineHeight" class="form-select form-select-sm">
+                    <% [1.2, 1.4, 1.6, 1.8].forEach(height=> { %>
+                      <option value="<%= height %>" <%=height===1.4 ? 'selected' : '' %>>
+                        <%= height===1.2 ? 'Compact' : height===1.4 ? 'Normal' : height===1.6 ? 'Relaxed' : 'Loose' %> (
+                          <%= height %>)
+                      </option>
+                      <% }); %>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div id="contentPanel" class="content-editor">
+              <div class="settings-group">
+                <div class="settings-group-title">
+                  <i class="fas fa-edit"></i>
+                  <span>Edit Content</span>
+                </div>
+
+
+              </div>
+          </aside>
+      </div>
+
+      <!-- Scripts -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+      <script>
+        // Explicitly make jsPDF available globally
+        window.jsPDF = window.jspdf.jsPDF;
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+      <script src="/js/main.js"></script>
+  </body>
+
 </html>

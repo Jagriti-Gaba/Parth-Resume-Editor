@@ -8,6 +8,12 @@
 
 <!-- </head> -->
 <body>
+    <% if (resumeData.profileImage) { %>
+    <div class="profile-image-container">
+      <img src="<%= resumeData.profileImage %>" alt="Profile Photo" class="profile-image">
+    </div>
+  <% } %>
+  <div class="name" contenteditable="true"><%= resumeData.name %></div>
   <header>
     <h1 contenteditable="true"><%= resumeData.name %></h1>
     <p contenteditable="true"><%= resumeData.phone %> | <%= resumeData.email %></p>

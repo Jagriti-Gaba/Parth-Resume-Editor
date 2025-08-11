@@ -65,11 +65,39 @@ class ResumeBuilder {
       this.domElements.resumeCanvas.style.color = this.domElements.fontColorInput.value;
       this.saveSettings();
     });
+this.domElements.bgColorInput?.addEventListener('input', () => {
+  const bgColor = this.domElements.bgColorInput.value;
+  this.domElements.resumeCanvas.style.backgroundColor = bgColor;
+  const resumeTemplate = this.domElements.resumeCanvas.querySelector('.resume-template');
+  if (resumeTemplate) {
+    resumeTemplate.style.backgroundColor = bgColor;
+  }
+  this.saveSettings();
+});
 
-    this.domElements.bgColorInput?.addEventListener('input', () => {
-      this.domElements.resumeCanvas.style.backgroundColor = this.domElements.bgColorInput.value;
-      this.saveSettings();
-    });
+document.getElementById('saveProfileImageBtn').addEventListener('click', async () => {
+  const fileInput = document.getElementById('profileImageUpload');
+  if (fileInput.files.length > 0) {
+    const formData = new FormData();
+    formData.append('profileImage', fileInput.files[0]);
+
+    try {
+      const response = await fetch('/upload-profile-image', {
+        method: 'POST',
+        body: formData
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        document.getElementById('profileImagePreview').src = result.imagePath;
+        // Update any global resume data here if applicable for live preview
+      }
+    } catch (error) {
+      console.error('Upload failed:', error);
+    }
+  }
+});
+
 
     this.domElements.headingColorInput?.addEventListener('input', () => {
       this.applyHeadingColor();
@@ -461,3 +489,27 @@ class ResumeBuilder {
 document.addEventListener('DOMContentLoaded', () => {
   new ResumeBuilder();
 });
+// Image Upload Handling
+document.getElementById('saveProfileImageBtn').addEventListener('click', async () => {
+  const fileInput = document.getElementById('profileImageUpload');
+  if (fileInput.files.length > 0) {
+    const formData = new FormData();
+    formData.append('profileImage', fileInput.files[0]);
+    
+    try {
+      const response = await fetch('/upload-profile-image', {
+        method: 'POST',
+        body: formData
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        // Update preview and resume data
+        document.getElementById('profileImagePreview').src = result.imagePath;
+        // Update your resumeData object or trigger a refresh
+      }
+    } catch (error) {
+      console.error('Upload failed:', error);
+    }
+  }
+}); 
