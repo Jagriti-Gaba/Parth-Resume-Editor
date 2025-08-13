@@ -1,62 +1,76 @@
-
 <body>
-  <h1 contenteditable="true"><%= resumeData.name %></h1>
-  <p><strong>Phone:</strong> <span contenteditable="true"><%= resumeData.phone %></span></p>
-  <p><strong>Email:</strong> <span contenteditable="true"><%= resumeData.email %></span></p>
+  <h1 contenteditable="true"><%= resumeData.name || '' %></h1>
+  <p><strong>Phone:</strong> <span contenteditable="true"><%= resumeData.phone || '' %></span></p>
+  <p><strong>Email:</strong> <span contenteditable="true"><%= resumeData.email || '' %></span></p>
 
   <section>
     <h2>Education</h2>
-    <% resumeData.education.forEach(edu => { %>
-      <div contenteditable="true">
-        <strong><%= edu.degree %></strong>, <%= edu.school %>, <%= edu.date %><br/>
-        Major: <%= edu.major %>
-      </div>
-    <% }) %>
+    <% if (resumeData.education && Array.isArray(resumeData.education)) { %>
+      <% resumeData.education.forEach(edu => { %>
+        <div contenteditable="true">
+          <strong><%= edu.degree || '' %></strong>, <%= edu.school || '' %>, <%= edu.date || '' %><br/>
+          Major: <%= edu.major || '' %>
+        </div>
+      <% }) %>
+    <% } %>
   </section>
 
   <section>
     <h2>Experience</h2>
-    <% resumeData.experience.forEach(exp => { %>
-      <div contenteditable="true" style="margin-bottom:10px;">
-        <strong><%= exp.position %></strong> at <%= exp.company %> (<%= exp.date %>)
-        <ul>
-          <% exp.responsibilities.forEach(item => { %>
-            <li><%= item %></li>
-          <% }) %>
-        </ul>
-      </div>
-    <% }) %>
+    <% if (resumeData.experience && Array.isArray(resumeData.experience)) { %>
+      <% resumeData.experience.forEach(exp => { %>
+        <div contenteditable="true" style="margin-bottom:10px;">
+          <strong><%= exp.position || '' %></strong> at <%= exp.company || '' %> (<%= exp.date || '' %>)
+          <ul>
+            <% if (exp.responsibilities && Array.isArray(exp.responsibilities)) { %>
+              <% exp.responsibilities.forEach(item => { %>
+                <li><%= item || '' %></li>
+              <% }) %>
+            <% } %>
+          </ul>
+        </div>
+      <% }) %>
+    <% } %>
   </section>
 
   <section>
     <h2>Skills</h2>
-    <% for (let cat in resumeData.skills) { %>
-      <p><strong><%= cat %>:</strong> <span contenteditable="true"><%= resumeData.skills[cat].join(', ') %></span></p>
+    <% if (resumeData.skills && typeof resumeData.skills === 'object') { %>
+      <% for (let cat in resumeData.skills) { %>
+        <p><strong><%= cat %>:</strong> <span contenteditable="true"><%= (resumeData.skills[cat] || []).join(', ') %></span></p>
+      <% } %>
     <% } %>
   </section>
 
   <section>
     <h2>Projects</h2>
-    <% resumeData.projects.forEach(proj => { %>
-      <div contenteditable="true" style="margin-bottom:10px;">
-        <strong><%= proj.name %></strong> — <%= proj.date %><br/>
-        Technologies: <%= proj.technologies %>
-        <ul>
-          <% proj.details.forEach(detail => { %>
-            <li><%= detail %></li>
-          <% }) %>
-        </ul>
-      </div>
-    <% }) %>
+    <% if (resumeData.projects && Array.isArray(resumeData.projects)) { %>
+      <% resumeData.projects.forEach(proj => { %>
+        <div contenteditable="true" style="margin-bottom:10px;">
+          <strong><%= proj.name || '' %></strong> — <%= proj.date || '' %><br/>
+          Technologies: <%= proj.technologies || '' %>
+          <ul>
+            <% if (proj.details && Array.isArray(proj.details)) { %>
+              <% proj.details.forEach(detail => { %>
+                <li><%= detail || '' %></li>
+              <% }) %>
+            <% } %>
+          </ul>
+        </div>
+      <% }) %>
+    <% } %>
   </section>
 
   <section>
     <h2>Achievements</h2>
-    <ul>
-      <% resumeData.achievements.forEach(ach => { %>
-        <li contenteditable="true"><%= ach %></li>
-      <% }) %>
-    </ul>
+    <% if (resumeData.achievements && Array.isArray(resumeData.achievements)) { %>
+      <ul>
+        <% resumeData.achievements.forEach(ach => { %>
+          <li contenteditable="true"><%= ach || '' %></li>
+        <% }) %>
+      </ul>
+    <% } %>
   </section>
 
-  <script src="/js/main.js"></script>  
+  <script src="/js/main.js"></script>
+</body>
