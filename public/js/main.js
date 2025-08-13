@@ -75,39 +75,6 @@ this.domElements.bgColorInput?.addEventListener('input', () => {
   this.saveSettings();
 });
 
-document.getElementById('saveProfileImageBtn').addEventListener('click', async () => {
-  const fileInput = document.getElementById('profileImageUpload');
-  if (fileInput.files.length > 0) {
-    const formData = new FormData();
-    formData.append('profileImage', fileInput.files[0]);
-
-    try {
-      const response = await fetch('/upload-profile-image', {
-        method: 'POST',
-        body: formData
-      });
-      const result = await response.json();
-
-      if (result.success) {
-        document.getElementById('profileImagePreview').src = result.imagePath;
-        // Update any global resume data here if applicable for live preview
-      }
-    } catch (error) {
-      console.error('Upload failed:', error);
-    }
-  }
-});
-
-
-    this.domElements.headingColorInput?.addEventListener('input', () => {
-      this.applyHeadingColor();
-      this.saveSettings();
-    });
-
-    this.domElements.lineHeightInput?.addEventListener('change', () => {
-      this.domElements.resumeInner.style.lineHeight = this.domElements.lineHeightInput.value;
-      this.saveSettings();
-    });
 
     // Text Alignment
     document.querySelectorAll('[data-alignment]').forEach(btn => {
@@ -433,56 +400,52 @@ document.getElementById('saveProfileImageBtn').addEventListener('click', async (
   }
 
   async exportToPDF() {
-    if (!this.domElements.resumeCanvas) return;
-    if (!window.jspdf || !window.jspdf.jsPDF) {
-      alert('PDF export is not available. Please try again later.');
-      return;
-    }
+  // Only select the template area, not the editor
+  const resumeElement = this.domElements.resumeCanvas.querySelector('.resume-template');
+  if (!resumeElement) return;
 
-    try {
-      const canvas = await html2canvas(this.domElements.resumeCanvas, {
-        scale: 2,
-        logging: false,
-        useCORS: true
-      });
+  await document.fonts.ready; // wait for fonts to finish loading
 
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgWidth = 210;
-      const pageHeight = 295;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  // Wait for all images in the resume to load
+  const images = resumeElement.querySelectorAll('img');
+  await Promise.all(Array.from(images).map(img => img.complete ? Promise.resolve() : new Promise(res => { img.onload = res; })));
 
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      pdf.save('resume.pdf');
-    } catch (error) {
-      console.error('PDF export failed:', error);
-      alert('Failed to generate PDF. Please try again.');
-    }
-  }
+  const canvas = await html2canvas(resumeElement, {
+    scale: 2,
+    backgroundColor: '#ffffff', // guarantees white background
+    useCORS: true,
+    logging: false
+  });
 
-  async exportToPNG() {
-    if (!this.domElements.resumeCanvas) return;
-    if (typeof html2canvas !== 'function') {
-      alert('Image export is not available. Please try again later.');
-      return;
-    }
+  const imgData = canvas.toDataURL('image/png');
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  const imgWidth = 210;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+  pdf.save('resume.pdf');
+}
 
-    try {
-      const canvas = await html2canvas(this.domElements.resumeCanvas, {
-        scale: 2,
-        logging: false,
-        useCORS: true
-      });
+async exportToPNG() {
+  const resumeElement = this.domElements.resumeCanvas.querySelector('.resume-template');
+  if (!resumeElement) return;
 
-      const link = document.createElement('a');
-      link.download = 'resume.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    } catch (error) {
-      console.error('PNG export failed:', error);
-      alert('Failed to generate image. Please try again.');
-    }
-  }
+  await document.fonts.ready;
+
+  const images = resumeElement.querySelectorAll('img');
+  await Promise.all(Array.from(images).map(img => img.complete ? Promise.resolve() : new Promise(res => { img.onload = res; })));
+
+  const canvas = await html2canvas(resumeElement, {
+    scale: 2,
+    backgroundColor: '#ffffff',
+    useCORS: true,
+    logging: false
+  });
+
+  const link = document.createElement('a');
+  link.download = 'resume.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
 }
 
 // Initialize the application when DOM is loaded
@@ -490,26 +453,3 @@ document.addEventListener('DOMContentLoaded', () => {
   new ResumeBuilder();
 });
 // Image Upload Handling
-document.getElementById('saveProfileImageBtn').addEventListener('click', async () => {
-  const fileInput = document.getElementById('profileImageUpload');
-  if (fileInput.files.length > 0) {
-    const formData = new FormData();
-    formData.append('profileImage', fileInput.files[0]);
-    
-    try {
-      const response = await fetch('/upload-profile-image', {
-        method: 'POST',
-        body: formData
-      });
-      const result = await response.json();
-      
-      if (result.success) {
-        // Update preview and resume data
-        document.getElementById('profileImagePreview').src = result.imagePath;
-        // Update your resumeData object or trigger a refresh
-      }
-    } catch (error) {
-      console.error('Upload failed:', error);
-    }
-  }
-}); 
