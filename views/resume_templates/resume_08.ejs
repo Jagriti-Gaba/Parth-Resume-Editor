@@ -1,0 +1,199 @@
+<!-- views/resume_templates/resume_samira_style.ejs -->
+<div class="resume-template samira-style" style="font-family:'Helvetica Neue', Arial, sans-serif; max-width:800px; margin:0 auto; background:#fff; padding:40px; border-radius:18px; box-shadow:0 8px 30px #eee;">
+  <!-- Header Section -->
+  <div style="display:flex; margin-bottom:40px; align-items:center;">
+    <!-- Profile Image Block -->
+    <div class="profile-image-block" style="flex-shrink:0;">
+      <div style="width:124px; height:124px; background:#e5dbd0; border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+        <% if (resumeData.profileImage) { %>
+          <img src="<%= resumeData.profileImage %>" alt="Profile Photo" style="width:100%; height:100%; object-fit:cover;">
+        <% } %>
+      </div>
+    </div>
+    <!-- Name & Title -->
+    <div style="margin-left:40px; flex:1;">
+      <% if (resumeData.name) { %>
+        <h1 contenteditable="true" style="font-size:2.3rem; font-weight:700; margin:0 0 10px 0; letter-spacing:1px; color:#333;">
+          <%= resumeData.name.toUpperCase() %>
+        </h1>
+      <% } %>
+      <% if (resumeData.title) { %>
+        <h2 contenteditable="true" style="font-size:1.3rem; font-weight:400; margin:0 0 2px 0; color:#a48d79;">
+          <%= resumeData.title %>
+        </h2>
+      <% } %>
+      <div style="margin-top:9px;">
+        <% if (resumeData.phone) { %>
+          <span contenteditable="true" style="display:inline-block; margin-right:18px; font-size:1rem; color:#665c54;">📞 <%= resumeData.phone %></span>
+        <% } %>
+        <% if (resumeData.address) { %>
+          <span contenteditable="true" style="display:inline-block; margin-right:18px; font-size:1rem; color:#665c54;">📍 <%= resumeData.address %></span>
+        <% } %>
+        <% if (resumeData.email) { %>
+          <span contenteditable="true" style="display:inline-block; font-size:1rem; color:#665c54;">✉️ <%= resumeData.email %></span>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Two Column Layout -->
+  <div style="display:flex;">
+    <!-- Left Column -->
+    <div style="width:38%; padding-right:32px;">
+      <!-- Education -->
+      <% if (resumeData.education && resumeData.education.length > 0) { %>
+        <div style="margin-bottom:38px;">
+          <div contenteditable="true" class="section-label" style="background:#efe2d1; color:#6d5438; font-weight:600; border-radius:12px; display:inline-block; padding:2px 18px; font-size:1.09rem; margin-bottom:18px;">EDUCATION</div>
+          <% resumeData.education.forEach(edu => { %>
+            <div style="margin-bottom:18px;">
+              <% if (edu.date) { %>
+                <div contenteditable="true" style="font-weight:600; font-size:0.97rem; color:#a58a73;">
+                  <%= edu.date %>
+                </div>
+              <% } %>
+              <% if (edu.school) { %>
+                <div contenteditable="true" style="font-size:1.07rem; font-weight:700; color:#332918;">
+                  <%= edu.school %>
+                </div>
+              <% } %>
+              <% if (edu.degree) { %>
+                <div contenteditable="true" style="font-size:0.98rem; color:#665c54; margin-bottom:3px;">
+                  <%= edu.degree %>
+                </div>
+              <% } %>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <!-- Skills -->
+      <% if (resumeData.skills) { %>
+        <div style="margin-bottom:38px;">
+          <div contenteditable="true" class="section-label" style="background:#efe2d1; color:#6d5438; font-weight:600; border-radius:12px; display:inline-block; padding:2px 18px; font-size:1.09rem;">SKILLS</div>
+
+          <% if (typeof resumeData.skills === 'object' && !Array.isArray(resumeData.skills)) { %>
+            <% Object.entries(resumeData.skills).forEach(([category, skills]) => { %>
+              <% if (skills && skills.length > 0) { %>
+                <div style="margin-bottom:10px;">
+                  <span contenteditable="true" style="color:#a58a73; font-weight:600;"><%= category %></span>
+                  <ul style="list-style-type:none; padding:0; margin:5px 0 0 12px;">
+                    <% skills.forEach(skill => { %>
+                      <li contenteditable="true" style="margin-bottom:5px; font-size:0.96rem; color:#665c54;">
+                        <%= skill %>
+                      </li>
+                    <% }); %>
+                  </ul>
+                </div>
+              <% } %>
+            <% }); %>
+          <% } else if (Array.isArray(resumeData.skills)) { %>
+            <ul style="list-style-type:none; padding:0; margin:6px 0 0 12px;">
+              <% resumeData.skills.forEach(skill => { %>
+                <li contenteditable="true" style="margin-bottom:8px; font-size:0.96rem; color:#665c54;">
+                  <%= skill %>
+                </li>
+              <% }); %>
+            </ul>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Right Column -->
+    <div style="flex:1; padding-left:34px; border-left:1px solid #eee;">
+      <!-- Profile Summary -->
+      <% if (resumeData.profile || resumeData.summary) { %>
+        <div style="margin-bottom:38px;">
+          <p contenteditable="true" style="font-size:1.01rem; color:#555; line-height:1.7;">
+            <%= resumeData.profile || resumeData.summary %>
+          </p>
+        </div>
+      <% } %>
+
+      <!-- Work Experience -->
+      <% if (resumeData.experience && resumeData.experience.length > 0) { %>
+        <div style="margin-bottom:38px;">
+          <div contenteditable="true" class="section-label" style="background:#efe2d1; color:#6d5438; font-weight:600; border-radius:12px; display:inline-block; padding:2px 18px; font-size:1.09rem; margin-bottom:18px;">WORK EXPERIENCE</div>
+          <% resumeData.experience.forEach(exp => { %>
+            <div style="position:relative; padding-left:20px; margin-bottom:22px;">
+              <div style="position:absolute; left:0; top:11px; width:9px; height:9px; background:#cbb9aa; border-radius:50%;"></div>
+              <% if (exp.date) { %>
+                <div contenteditable="true" style="font-weight:600; color:#ab9678; margin-bottom:4px; font-size:0.97rem;">
+                  <%= exp.date %>
+                </div>
+              <% } %>
+              <% if (exp.company) { %>
+                <div contenteditable="true" style="font-weight:700; font-size:1.07rem; color:#332918; margin-bottom:3px;">
+                  <%= exp.company %>
+                </div>
+              <% } %>
+              <% if (exp.position) { %>
+                <div contenteditable="true" style="font-size:0.97rem; color:#665c54; margin-bottom:3px;">
+                  <%= exp.position %>
+                </div>
+              <% } %>
+              <% if (exp.responsibilities && exp.responsibilities.length > 0) { %>
+                <ul style="padding-left:17px;">
+                  <% exp.responsibilities.forEach(resp => { %>
+                    <li contenteditable="true" style="margin-bottom:5px; font-size:0.97rem; color:#665c54;">
+                      <%= resp %>
+                    </li>
+                  <% }); %>
+                </ul>
+              <% } %>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <!-- Projects -->
+      <% if (resumeData.projects && resumeData.projects.length > 0) { %>
+        <div style="margin-bottom:38px;">
+          <div contenteditable="true" class="section-label" style="background:#efe2d1; color:#6d5438; font-weight:600; border-radius:12px; display:inline-block; padding:2px 18px; font-size:1.09rem; margin-bottom:18px;">PROJECTS</div>
+          <% resumeData.projects.forEach(proj => { %>
+            <div style="margin-bottom:15px;">
+              <% if (proj.name) { %>
+                <div contenteditable="true" style="font-weight:700; font-size:1.07rem; color:#a58a73;">
+                  <%= proj.name %>
+                </div>
+              <% } %>
+              <% if (proj.technologies) { %>
+                <div contenteditable="true" style="font-size:0.97rem; color:#665c54;">
+                  <%= proj.technologies %>
+                </div>
+              <% } %>
+              <% if (proj.date) { %>
+                <div contenteditable="true" style="font-size:0.97rem; color:#665c54;">
+                  <%= proj.date %>
+                </div>
+              <% } %>
+              <% if (proj.details && proj.details.length > 0) { %>
+                <ul style="padding-left:15px;">
+                  <% proj.details.forEach(detail => { %>
+                    <li contenteditable="true" style="margin-bottom:5px; font-size:0.97rem; color:#665c54;">
+                      <%= detail %>
+                    </li>
+                  <% }); %>
+                </ul>
+              <% } %>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <!-- Achievements -->
+      <% if (resumeData.achievements && resumeData.achievements.length > 0) { %>
+        <div>
+          <div contenteditable="true" class="section-label" style="background:#efe2d1; color:#6d5438; font-weight:600; border-radius:12px; display:inline-block; padding:2px 18px; font-size:1.09rem; margin-bottom:18px;">ACHIEVEMENTS</div>
+          <ul style="padding-left:15px;">
+            <% resumeData.achievements.forEach(ach => { %>
+              <li contenteditable="true" style="margin-bottom:9px; font-size:0.98rem; color:#665c54;">
+                <%= ach %>
+              </li>
+            <% }); %>
+          </ul>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>

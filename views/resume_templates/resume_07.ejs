@@ -1,0 +1,110 @@
+<!-- views/resume_templates/resume_connor_style -->
+<div class="resume-template" style="font-family:'Arial', sans-serif; max-width:800px; margin:0 auto; background:#fff; display:flex;">
+
+  <!-- Left Column (Blue Background) -->
+  <div style="width:45%; background:#2d5f91; color:white; padding:40px 30px;">
+
+    <!-- Name Section -->
+    <div style="text-align:center; margin-bottom:40px;">
+      <h1 contenteditable="true" style="font-size:2.5rem; font-weight:bold; margin:0; text-transform:uppercase; letter-spacing:2px;">
+        <%= resumeData.name.split(' ')[0] || 'JAGRITI' %>
+      </h1>
+      <h1 contenteditable="true" style="font-size:2.5rem; font-weight:bold; margin:0; text-transform:uppercase; letter-spacing:2px;">
+        <%= resumeData.name.split(' ')[1] || 'GABA' %>
+      </h1>
+      <div style="height:4px; background:white; width:50px; margin:10px auto;"></div>
+      <p contenteditable="true" style="font-size:1.1rem; text-transform:uppercase; margin:5px 0 0 0;">FULL STACK ENGINEER</p>
+    </div>
+
+    <!-- Profile Image -->
+    <% if (resumeData.profileImage) { %>
+      <div style="text-align:center; margin-bottom:40px;">
+        <img src="<%= resumeData.profileImage %>" alt="Profile Photo" style="width:160px; height:160px; object-fit:cover; border-radius:50%; border:3px solid white;">
+      </div>
+    <% } %>
+
+    <!-- Contact Section -->
+    <div style="margin-bottom:40px;">
+      <h3 contenteditable="true" style="font-size:1.2rem; text-transform:uppercase; margin-bottom:15px; letter-spacing:1px;">CONTACT ME</h3>
+      <div style="margin-bottom:8px;">
+        <div contenteditable="true" style="font-size:0.95rem;"><%= resumeData.phone %></div>
+      </div>
+      <div style="margin-bottom:8px;">
+        <div contenteditable="true" style="font-size:0.95rem;"><%= resumeData.email %></div>
+      </div>
+    </div>
+
+    <!-- Education Section -->
+    <div style="margin-bottom:40px;">
+      <h3 contenteditable="true" style="font-size:1.2rem; text-transform:uppercase; margin-bottom:15px; letter-spacing:1px;">EDUCATION</h3>
+      <% resumeData.education.forEach(edu => { %>
+        <div style="margin-bottom:20px;">
+          <div contenteditable="true" style="font-weight:bold; font-size:1rem;"><%= edu.major || edu.degree %></div>
+          <div contenteditable="true" style="font-size:0.9rem; margin:5px 0;"><%= edu.school %></div>
+          <div contenteditable="true" style="font-size:0.85rem; color:#ddd;"><%= edu.date %></div>
+        </div>
+      <% }); %>
+    </div>
+
+  </div>
+
+  <!-- Right Column (White Background) -->
+  <div style="flex:1; padding:40px 30px; color:#333;">
+
+    <!-- Profile Summary -->
+    <div style="margin-bottom:40px;">
+      <p contenteditable="true" style="line-height:1.6; font-size:1rem;">
+        As a Full Stack Engineer, I am passionate about building innovative web solutions.
+        My professional journey has developed my technical skills in both frontend and backend development,
+        along with strong problem-solving and collaboration abilities.
+      </p>
+    </div>
+
+    <!-- Experience Section -->
+    <div style="margin-bottom:40px;">
+      <h3 contenteditable="true" style="font-size:1.3rem; text-transform:uppercase; margin-bottom:20px; letter-spacing:1px; color:#2d5f91;">EXPERIENCE</h3>
+      <% resumeData.experience.forEach(exp => { %>
+        <div style="margin-bottom:25px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+            <span contenteditable="true" style="font-weight:bold; font-size:1.1rem;"><%= exp.company %></span>
+            <span contenteditable="true" style="color:#666; font-size:0.9rem;"><%= exp.date %></span>
+          </div>
+          <div contenteditable="true" style="font-style:italic; color:#2d5f91; margin-bottom:10px;"><%= exp.position %></div>
+          <ul style="margin-left:20px; padding-left:5px;">
+            <% exp.responsibilities.forEach(r => { %>
+              <li contenteditable="true" style="margin-bottom:8px; font-size:0.95rem;"><%= r %></li>
+            <% }); %>
+          </ul>
+        </div>
+      <% }); %>
+    </div>
+
+    <!-- Projects Section -->
+    <div style="margin-bottom:40px;">
+      <h3 contenteditable="true" style="font-size:1.3rem; text-transform:uppercase; margin-bottom:20px; letter-spacing:1px; color:#2d5f91;">PROJECTS</h3>
+      <% resumeData.projects.forEach(proj => { %>
+        <div style="margin-bottom:20px;">
+          <div contenteditable="true" style="font-weight:bold; font-size:1.1rem; margin-bottom:5px;"><%= proj.name %></div>
+          <div contenteditable="true" style="font-size:0.9rem; color:#666; margin-bottom:5px;"><%= proj.technologies %></div>
+          <div contenteditable="true" style="font-size:0.9rem; color:#666; margin-bottom:10px;"><%= proj.date %></div>
+          <ul style="margin-left:20px; padding-left:5px;">
+            <% proj.details.forEach(detail => { %>
+              <li contenteditable="true" style="margin-bottom:8px; font-size:0.95rem;"><%= detail %></li>
+            <% }); %>
+          </ul>
+        </div>
+      <% }); %>
+    </div>
+
+    <!-- Achievements Section -->
+    <div>
+      <h3 contenteditable="true" style="font-size:1.3rem; text-transform:uppercase; margin-bottom:20px; letter-spacing:1px; color:#2d5f91;">ACHIEVEMENTS</h3>
+      <ul style="margin-left:20px; padding-left:5px;">
+        <% resumeData.achievements.forEach(ach => { %>
+          <li contenteditable="true" style="margin-bottom:8px; font-size:0.95rem;"><%= ach %></li>
+        <% }); %>
+      </ul>
+    </div>
+
+  </div>
+</div>

@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 
 const resumeData = {
-  name: "Dilip Kumar",
+  name: "Jagriti Gaba",
   phone: "+91 895009584",
   email: "dilipkumar.docx@fes.higmail.com",
   profileImage: "/Jagriti Profile.jpg",
@@ -57,7 +57,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 console.log(path.join(__dirname, 'views', 'partials', 'header.ejs'))
 
-const allowedTemplates = ["modern", "basic", "professional","classic","designer","standard","creative","minimalist"];
+const allowedTemplates = ["01", "02", "03","04","05","06","07","08","09","10"];
 
 const multer = require('multer');
 const upload = multer({ dest: 'public/images/uploads/' });
@@ -87,5 +87,21 @@ app.get('/resume/:templateId', (req, res) => {
     templateId,
   });
 });
+
+app.get('/view-resume/:templateId', (req, res) => {
+  const templateId = req.params.templateId;
+
+  if (!allowedTemplates.includes(templateId)) {
+    return res.status(404).send('Template not found');
+  }
+
+  // Here you could also fetch resumeData from DB by userId instead of hardcoding
+  res.render(
+    `resume_templates/resume_${templateId}`, // directly render template partial
+    { resumeData } // pass the filled resume data
+  );
+});
+
+
 
 app.listen(3005, () => console.log('Server running on http://localhost:3005'));
