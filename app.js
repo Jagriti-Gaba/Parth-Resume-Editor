@@ -10,6 +10,7 @@ const ejs = require('ejs');
 const axios = require('axios');
 const connectDB = require('./config/db');
 
+
 // ✅ Connect to MongoDB
 connectDB();
 
@@ -22,55 +23,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 // ----- Hardcoded resume data -----
-const resumeData = {
-  name: "Jagriti Gaba",
-  phone: "+91 895009584",
-  email: "dilipkumar.docx@fes.higmail.com",
-  profileImage: "/Jagriti Profile.jpg",
-  education: [
-    {
-      degree: "Govt. College Chhachhrauli - Kurukshetta University",
-      school: "Yanumanagar, Haryana",
-      date: "Aug. 2022 - Mar. 2025",
-      major: "Bachelor of Computer Applications (BCA)"
-    },
-    {
-      degree: "Govt. Sr. Sec. School, Workshop - Jagadhti",
-      school: "Yanumanagar, Haryana",
-      date: "July 2020 - June 2022",
-      major: "Commerce with maths"
-    }
-  ],
-  experience: [
-    {
-      position: "Full Stack Engineer",
-      company: "at NextGo ERI",
-      date: "June 2024 - present",
-      responsibilities: [
-        "Developed a job portal web application enabling recruiters to post positions...",
-        "Built comprehensive authentication system with JWT-based security..."
-      ]
-    }
-  ],
-  projects: [
-    {
-      name: "RessScope AI",
-      technologies: "Net.js, Tailwind, Material UI, Gap",
-      link: "#",
-      date: "July 2025 - July 2025",
-      details: [
-        "Developed and implemented an AI-powered resume scoring system..."
-      ]
-    },
-  ],
-  skills: {
-    "Languages": ["C", "C++", "JavaScript", "HTML/CSS", "Go", "Python", "SQL"],
-    "Frameworks": ["Node.js", "Express.js", "Django", "React", "Nextjs"],
-  },
-  achievements: [
-    "Achieved 'Role of Honour' for obtaining 'The Best explanation' award in State Level Exhibition among 150+ colleges."
-  ]
-};
 
 // ----- Local allowedTemplates logic -----
 const templatesDir = path.join(__dirname, 'views/resume_templates');
@@ -189,12 +141,33 @@ app.get('/resume/:templateId', (req, res) => {
 });
 
 // ✅ Old-style local route: view resume rendered from local folder template
-app.get('/view-resume/:templateId', (req, res) => {
-  const templateId = req.params.templateId;
+app.get('/view-resume/:templateId/:registrationNo', async (req, res) => {
+  const { templateId, registrationNo } = req.params;
+
+  // 1️⃣ Check if template exists locally
   if (!allowedTemplates.includes(templateId)) {
     return res.status(404).send('Template not found');
   }
-  res.render(`resume_templates/resume_${templateId}`, { resumeData });
+
+  try {
+    // 2️⃣ Fetch resume data from backend API
+    const { data: resumeData } = await axios.get(
+      `http://localhost:3000/api/profile/get/${registrationNo}`
+    );
+
+    // 3️⃣ Render template with data (empty fallback)
+    res.render(`resume_templates/resume_${templateId}`, { 
+      resumeData: resumeData || {} 
+    });
+
+  } catch (error) {
+    console.error('❌ Error fetching resume data:', error.message);
+
+    // 4️⃣ Render empty placeholders instead of error page
+    res.render(`resume_templates/resume_${templateId}`, { 
+      resumeData: {} 
+    });
+  }
 });
 
 // ✅ Cloudinary-based view route: fetch .ejs from Cloudinary and render with data
@@ -202,7 +175,7 @@ app.get('/view-cloud-resume/:templateId', async (req, res) => {
   try {
     const template = await Template.findOne({ templateId: req.params.templateId });
     if (!template) return res.status(404).send('Template not found');
-
+    
     const { data: templateContent } = await axios.get(template.url);
     const renderedHtml = ejs.render(templateContent, { 
       resumeData, 
