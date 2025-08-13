@@ -13,7 +13,7 @@ class ResumeBuilder {
       headingColorInput: document.getElementById('headingColor'),
       lineHeightInput: document.getElementById('lineHeight'),
       newSectionType: document.getElementById('newSectionType'),
-      resumeInner: document.querySelector('.resume-inner'),
+      resumeInner: document.querySelector('.resume-inner'), // ✅ your main content container
       settingsPanel: document.querySelector('.settings-panel')
     };
 
@@ -21,6 +21,9 @@ class ResumeBuilder {
       objective: new bootstrap.Modal(document.getElementById('objectiveModal')),
       customSection: new bootstrap.Modal(document.getElementById('customSectionModal'))
     };
+
+    // ✅ Bind delete handler to keep correct `this`
+    this.deleteSectionHandler = this.deleteSectionHandler.bind(this);
 
     this.init();
   }
@@ -65,16 +68,16 @@ class ResumeBuilder {
       this.domElements.resumeCanvas.style.color = this.domElements.fontColorInput.value;
       this.saveSettings();
     });
-this.domElements.bgColorInput?.addEventListener('input', () => {
-  const bgColor = this.domElements.bgColorInput.value;
-  this.domElements.resumeCanvas.style.backgroundColor = bgColor;
-  const resumeTemplate = this.domElements.resumeCanvas.querySelector('.resume-template');
-  if (resumeTemplate) {
-    resumeTemplate.style.backgroundColor = bgColor;
-  }
-  this.saveSettings();
-});
 
+    this.domElements.bgColorInput?.addEventListener('input', () => {
+      const bgColor = this.domElements.bgColorInput.value;
+      this.domElements.resumeCanvas.style.backgroundColor = bgColor;
+      const resumeTemplate = this.domElements.resumeCanvas.querySelector('.resume-template');
+      if (resumeTemplate) {
+        resumeTemplate.style.backgroundColor = bgColor;
+      }
+      this.saveSettings();
+    });
 
     // Text Alignment
     document.querySelectorAll('[data-alignment]').forEach(btn => {
@@ -122,19 +125,24 @@ this.domElements.bgColorInput?.addEventListener('input', () => {
 
   toggleEditMode() {
     this.editMode = !this.editMode;
-    const editableElements = document.querySelectorAll('.resume-content [contenteditable="true"]');
+
+    // ✅ FIX: Target editable elements inside .resume-inner instead of a non-existent .resume-content
+    const editableElements = this.domElements.resumeInner.querySelectorAll('[contenteditable="true"]');
     const deleteButtons = document.querySelectorAll('.delete-section-btn');
 
+    // Toggle contentEditable state
     editableElements.forEach(el => {
       el.contentEditable = this.editMode;
     });
 
+    // Toggle delete button visibility
     deleteButtons.forEach(btn => {
       btn.style.display = this.editMode ? 'flex' : 'none';
     });
 
-    this.domElements.toggleEditBtn.innerHTML = this.editMode 
-      ? '<i class="fas fa-eye me-1"></i> Preview Mode' 
+    // Change button icon/text
+    this.domElements.toggleEditBtn.innerHTML = this.editMode
+      ? '<i class="fas fa-eye me-1"></i> Preview Mode'
       : '<i class="fas fa-edit me-1"></i> Edit Content';
 
     this.domElements.toggleEditBtn.classList.toggle('btn-outline-light');
@@ -352,7 +360,6 @@ this.domElements.bgColorInput?.addEventListener('input', () => {
       textAlign: document.querySelector('[data-alignment].active')?.dataset.alignment,
       template: document.querySelector('.template-card.active')?.dataset.template
     };
-
     localStorage.setItem('resumeSettings', JSON.stringify(settings));
   }
 
@@ -362,7 +369,6 @@ this.domElements.bgColorInput?.addEventListener('input', () => {
 
     const settings = JSON.parse(savedSettings);
 
-    // Apply settings to inputs
     if (settings.fontSize) this.domElements.fontSizeInput.value = settings.fontSize;
     if (settings.fontFamily) this.domElements.fontStyleInput.value = settings.fontFamily;
     if (settings.fontColor) this.domElements.fontColorInput.value = settings.fontColor;
@@ -370,7 +376,6 @@ this.domElements.bgColorInput?.addEventListener('input', () => {
     if (settings.headingColor) this.domElements.headingColorInput.value = settings.headingColor;
     if (settings.lineHeight) this.domElements.lineHeightInput.value = settings.lineHeight;
 
-    // Apply settings to elements
     if (this.domElements.resumeCanvas) {
       this.domElements.resumeCanvas.style.fontSize = `${settings.fontSize}px`;
       this.domElements.resumeCanvas.style.fontFamily = settings.fontFamily;
@@ -383,73 +388,67 @@ this.domElements.bgColorInput?.addEventListener('input', () => {
       this.domElements.resumeInner.style.lineHeight = settings.lineHeight;
     }
 
-    // Activate template
     if (settings.template) {
       this.switchTemplate(settings.template);
     }
 
-    // Activate alignment button
     document.querySelectorAll('[data-alignment]').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.alignment === settings.textAlign);
     });
 
-    // Activate template card
     document.querySelectorAll('.template-card').forEach(card => {
       card.classList.toggle('active', card.dataset.template === settings.template);
     });
   }
 
   async exportToPDF() {
-  // Only select the template area, not the editor
-  const resumeElement = this.domElements.resumeCanvas.querySelector('.resume-template');
-  if (!resumeElement) return;
+    const resumeElement = this.domElements.resumeCanvas.querySelector('.resume-template');
+    if (!resumeElement) return;
 
-  await document.fonts.ready; // wait for fonts to finish loading
+    await document.fonts.ready;
 
-  // Wait for all images in the resume to load
-  const images = resumeElement.querySelectorAll('img');
-  await Promise.all(Array.from(images).map(img => img.complete ? Promise.resolve() : new Promise(res => { img.onload = res; })));
+    const images = resumeElement.querySelectorAll('img');
+    await Promise.all(Array.from(images).map(img => img.complete ? Promise.resolve() : new Promise(res => { img.onload = res; })));
 
-  const canvas = await html2canvas(resumeElement, {
-    scale: 2,
-    backgroundColor: '#ffffff', // guarantees white background
-    useCORS: true,
-    logging: false
-  });
+    const canvas = await html2canvas(resumeElement, {
+      scale: 2,
+      backgroundColor: '#ffffff',
+      useCORS: true,
+      logging: false
+    });
 
-  const imgData = canvas.toDataURL('image/png');
-  const pdf = new jsPDF('p', 'mm', [210, 420]);
-  const imgWidth = 210;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-  pdf.save('resume.pdf');
-}
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', [210, 420]);
+    const imgWidth = 210;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+    pdf.save('resume.pdf');
+  }
 
-async exportToPNG() {
-  const resumeElement = this.domElements.resumeCanvas.querySelector('.resume-template');
-  if (!resumeElement) return;
+  async exportToPNG() {
+    const resumeElement = this.domElements.resumeCanvas.querySelector('.resume-template');
+    if (!resumeElement) return;
 
-  await document.fonts.ready;
+    await document.fonts.ready;
 
-  const images = resumeElement.querySelectorAll('img');
-  await Promise.all(Array.from(images).map(img => img.complete ? Promise.resolve() : new Promise(res => { img.onload = res; })));
+    const images = resumeElement.querySelectorAll('img');
+    await Promise.all(Array.from(images).map(img => img.complete ? Promise.resolve() : new Promise(res => { img.onload = res; })));
 
-  const canvas = await html2canvas(resumeElement, {
-    scale: 2,
-    backgroundColor: '#ffffff',
-    useCORS: true,
-    logging: false
-  });
+    const canvas = await html2canvas(resumeElement, {
+      scale: 2,
+      backgroundColor: '#ffffff',
+      useCORS: true,
+      logging: false
+    });
 
-  const link = document.createElement('a');
-  link.download = 'resume.png';
-  link.href = canvas.toDataURL('image/png');
-  link.click();
-}
+    const link = document.createElement('a');
+    link.download = 'resume.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
 }
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   new ResumeBuilder();
 });
-// Image Upload Handling
