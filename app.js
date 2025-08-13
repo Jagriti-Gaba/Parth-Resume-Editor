@@ -55,22 +55,60 @@ const resumeData = {
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
-console.log(path.join(__dirname, 'views', 'partials', 'header.ejs'))
 
-const allowedTemplates = ["01", "02", "03","04","05","06","07","08","09","10"];
+
+
+
+//to populate array
+const fs = require('fs');
+const templatesDir = path.join(__dirname, 'views/resume_templates');
+
+// Load allowed templates dynamically from folder
+function loadAllowedTemplates() {
+  return fs.readdirSync(templatesDir)
+    .filter(file => /^resume_\d+\.ejs$/.test(file)) // only files like resume_01.ejs
+    .map(file => file.match(/\d+/)[0]); // extract the number as string (e.g. "01")
+}
+
+let allowedTemplates = loadAllowedTemplates();
+
+
+
 
 const multer = require('multer');
-const upload = multer({ dest: 'public/images/uploads/' });
-
-app.post('/upload-profile-image', upload.single('profileImage'), (req, res) => {
-  if (req.file) {
-    const imagePath = `/images/uploads/${req.file.filename}`;
-    // Save this path to your database or session
-    res.json({ success: true, imagePath });
-  } else {
-    res.status(400).json({ success: false });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, 'views/resume_templates'));
+  },
+  filename: function (req, file, cb) {
+    // Optional: sanitize or process file name
+    cb(null, file.originalname); // Save as original name (e.g. "resume_11.ejs")
   }
 });
+const templateUpload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    // Only accept .ejs files
+    if (path.extname(file.originalname) === '.ejs') {
+      cb(null, true);
+    } else {
+      cb(new Error('Only .ejs files allowed!'));
+    }
+  }
+});
+
+
+app.post('/upload-template', templateUpload.single('resumeTemplate'), (req, res) => {
+  if (req.file) {
+    // Refresh allowedTemplates after new file is added
+    allowedTemplates = loadAllowedTemplates();
+    res.json({ success: true, filename: req.file.filename, allowedTemplates });
+  } else {
+    res.status(400).json({ success: false, message: 'No file uploaded or file type incorrect.' });
+  }
+});
+
+
 
 app.get('/resume/:templateId', (req, res) => {
   const templateId = req.params.templateId;
@@ -102,6 +140,10 @@ app.get('/view-resume/:templateId', (req, res) => {
   );
 });
 
+//for debugging
+app.get('/list-templates', (req, res) => {
+  res.json({ allowedTemplates });
+});
 
 
 app.listen(3005, () => console.log('Server running on http://localhost:3005'));

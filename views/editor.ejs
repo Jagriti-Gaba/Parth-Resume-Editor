@@ -45,7 +45,6 @@
                   <div class="resume-template <%= templateId %>">
                     <%- include(selectedTemplate, { resumeData: resumeData }) %>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -75,21 +74,6 @@
                     <option value="'Lato', sans-serif">Lato (Friendly)</option>
                     <option value="'Times New Roman', serif">Times New Roman (Classic)</option>
                   </select>
-                </div>
-              </div>
-              <div class="settings-group">
-                <div class="settings-group-title">
-                  <i class="fas fa-camera fs-4"></i>
-                  <span class="fs-4">Profile Image</span>
-                </div>
-                <div class="mb-3">
-                  <% if (resumeData.profileImage) { %>
-                    <img src="<%= resumeData.profileImage %>" id="profileImagePreview" class="img-thumbnail mb-2"
-                      style="max-height: 100px;">
-                    <% } %>
-                      <input type="file" id="profileImageUpload" accept="image/*" class="form-control form-control-sm">
-                      <button id="saveProfileImageBtn" class="btn btn-s mt-2 rounded-pill btn-outline-light"
-                        style="background: linear-gradient(45deg, #d592f9, #6366f1)">Save Image</button>
                 </div>
               </div>
 
@@ -165,9 +149,8 @@
                   <i class="fas fa-edit"></i>
                   <span>Edit Content</span>
                 </div>
-
-
               </div>
+            </div>
           </aside>
       </div>
 
@@ -181,5 +164,4 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
       <script src="/js/main.js"></script>
   </body>
-
 </html>
