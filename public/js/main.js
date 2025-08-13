@@ -418,7 +418,7 @@ this.domElements.bgColorInput?.addEventListener('input', () => {
   });
 
   const imgData = canvas.toDataURL('image/png');
-  const pdf = new jsPDF('p', 'mm', 'a4');
+  const pdf = new jsPDF('p', 'mm', [210, 420]);
   const imgWidth = 210;
   const imgHeight = (canvas.height * imgWidth) / canvas.width;
   pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
