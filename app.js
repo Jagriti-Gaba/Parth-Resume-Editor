@@ -243,5 +243,33 @@ app.get('/view-cloud-resume/:templateId/:registrationNo', async (req, res) => {
   }
 });
 
+// ✅ Local view route: directly view a local template with real API data
+app.get('/view-resume/:templateId/:registrationNo', async (req, res) => {
+  const { templateId, registrationNo } = req.params;
+
+  // Ensure the template exists locally
+  if (!allowedTemplates.includes(templateId)) {
+    return res.status(404).send('Template not found');
+  }
+
+  try {
+    // Fetch resume data from API
+    const { data } = await axios.get(
+      `http://localhost:3000/api/profile/get/${registrationNo}`
+    );
+    const resumeData = mapApiToTemplate(data);
+
+    // Render the local resume template directly with the transformed data
+    res.render(`resume_templates/resume_${templateId}`, { resumeData });
+
+  } catch (error) {
+    console.error('❌ Error rendering local resume:', error.message);
+    res.status(500).send('Error rendering resume');
+  }
+});
+
+
+
+
 // --------- START SERVER ---------
 app.listen(3005, () => console.log('🚀 Server running on http://localhost:3005'));
