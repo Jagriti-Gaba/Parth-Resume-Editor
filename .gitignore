@@ -1,4 +1,2 @@
 # Node.js
 node_modules/
-# Ignore all env files anywhere in the project
-**/.env
