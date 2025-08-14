@@ -2,9 +2,10 @@
 
   <!-- Left Sidebar / Photo & Contacts -->
   <div style="width:280px; background:#ffffff; border-radius:18px 0 0 18px; padding:38px 24px; color:#214072; display:flex; flex-direction:column; align-items:center;">
-    <% if (resumeData.profileImage) { %>
-      <img src="<%= resumeData.profileImage %>" alt="Profile Photo" style="width:130px; height:130px; object-fit:cover; border-radius:50%; margin-bottom:22px; border:5px solid #d9e3f0;">
-    <% } %>
+    <% if (resumeData.profilePic) { %>
+  <img src="<%= resumeData.profilePic %>" alt="Profile Photo"
+    style="width:120px; height:120px; object-fit:cover; border-radius:50%; margin:0 auto 25px; display:block; border:4px solid #ecf0f1;">
+<% } %>
     
     <div style="width:100%; margin-bottom:26px;">
       <h2 contenteditable="true" style="font-size:2rem; font-weight:700; margin-bottom:2px; color:#173466;">
